@@ -49,7 +49,7 @@ def sendmail():
 
 @app.route("/")
 def homepage():
-    with open("homepage.html","r") as fle: return ''.join(fle.readlines())
+    with open("./homepage.html","r") as fle: return ''.join(fle.readlines())
 
 if __name__ == "__main__":
     log("Starting flask application")
