@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>MailingAPI</title>
+        <style>
+            body {
+                background-color: #0044ff;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome to MailingAPI!</h1>
+        <h2>We provide free SMTP SSL E-Mail sending using our API</h2>
+        <h3>Why use MailingAPI?</h3>
+        <p>
+            We offer simple SMTP E-Mail sending without asking for registration or any kind of your data.<br>
+            We do not store any data you send to us in logs or anything else. Once you have the answer of our server to your request, our server immediately forgets who you are.<br>
+            Since we use SMTP protocol with SSL (port 465), our wervice can be used for a wide range of E-Mail providers.
+        </p>
+        <br>
+        <h3>How the JSON object has to look like for '/api/sendmail':</h3>
+        <p>
+            <b>{"smtp_server":SERVER-ADDR,"from_email":SENDER,"from_password":SENDER-PWD,"to_email":RECIEVER,"subject":SUBJECT,"content":MESSAGE}</b><br>
+            <i>What do the parameters mean?</i>
+            <ul>
+                <li><b>SERVER-ADDR </b>defines the SMTP Server domain of your provider</li>
+                <li><b>SENDER </b>Your E-Mail address</li>
+                <li><b>SENDER-PWD </b>Your password for your provider. We do not store this longer than your request takes.</li>
+                <li><b>RECIEVER </b>is the E-Mail address of the person who should recieve the E-Mail. We do only support sending E-Mails to one person at a time, so this need to be a String.</li>
+                <li><b>SUBJECT </b>The sentence the reciever will see the first when he looks at the E-Mail</li>
+                <li><b>MESSAGE </b>is the text you want to send. This can yeither be normal text OR HTML formatted text.</li>
+            </ul>
+        </p>
+    </body>
+</html>
