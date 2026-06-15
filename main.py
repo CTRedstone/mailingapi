@@ -5,10 +5,16 @@ from werkzeug.utils import secure_filename
 import os
 import smtplib
 from email.mime.text import MIMEText
+import socket
 
 def log(msg): print(msg.upper())
 
 ret = lambda value,_type,msg: {"value":"succeeded" if value == True else "failed","type":_type.lower(),"detail":msg}
+
+def testConnection(ip:str,port:int):
+    try: socket.create_connection((ip,port),timeout=5)
+    except: return False
+    return True
 
 log("Creating FLask Instance")
 app = Flask(__name__)
@@ -35,6 +41,12 @@ def sendmail():
     msg["Subject"] = subject
     msg["From"] = sendaddr
     msg["To"] = toaddr
+
+    log("Testing connection to E-Mail SMTP provider")
+    if testConnection(serv,sslport) == False:
+        print("Connection timed out")
+        return ret(False,"error","SMTP server port for SSL access is not reachable")
+    print("Serverport for SMTP SSL access was reachable")
 
     log("Trying to send email")
     try:
