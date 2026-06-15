@@ -12,6 +12,10 @@ def log(msg): print(msg.upper())
 ret = lambda value,_type,msg: {"value":"succeeded" if value == True else "failed","type":_type.lower(),"detail":msg}
 
 def testConnection(ip:str,port:int):
+    try:
+        addr = socket.gethostbyname(ip)
+        log(f"DNS address of {ip} could be resolved to {addr}")
+    except: return None
     try: socket.create_connection((ip,port),timeout=5)
     except: return False
     return True
@@ -50,9 +54,13 @@ def sendmail():
     msg["To"] = toaddr
 
     log("Testing connection to E-Mail SMTP provider")
-    if testConnection(serv,sslport) == False:
+    testresult = testConnection(serv,sslport)
+    if testresult == False:
         print("Connection timed out")
         return ret(False,"error","SMTP server port for SSL access is not reachable")
+    elif testresult == None:
+        print("Could not resolve hostname")
+        return ret(False,"error","DNS address of server could not be found")
     print("Serverport for SMTP SSL access was reachable")
 
     log("Trying to send email")
