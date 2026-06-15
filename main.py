@@ -29,7 +29,14 @@ def sendmail():
     # configuration variables
     try:
         serv = req["smtp_server"]
-        sslport = 465
+        if "smtp_port" in list(req.keys()):
+            if type(req["smtp_port"]) == int: sslport = req["smtp_port"]
+            elif type(req["smtp_port"]) == str:
+                ports = {"ssl":"465","tls":"587"}
+                try: sslport = ports[req["smtp_port"].lower()]
+                except KeyError: return ret(False,"error",f"Invailid type of SMTP port selected: {repr(req['smtp_port'])}")
+            else: return ret(False,"error","Unknown datatype for SMTP port")
+        else: sslport = 465
         sendaddr = req["from_email"]
         sendpwd = req["from_password"]
         toaddr = req["to_email"]
@@ -50,9 +57,15 @@ def sendmail():
 
     log("Trying to send email")
     try:
-        with smtplib.SMTP_SSL(serv,sslport) as svr:
-            svr.login(sendaddr,sendpwd)
-            svr.sendmail(sendaddr,[toaddr],msg.as_string())
+        if sslport == 465: # for SSL communication
+            with smtplib.SMTP_SSL(serv,sslport) as svr:
+                svr.login(sendaddr,sendpwd)
+                svr.sendmail(sendaddr,[toaddr],msg.as_string())
+        else: # for TLS communication, normally port 587
+            with smtplib.SMTP(serv,sslport) as svr:
+                svr.starttls()
+                svr.login(sendaddr,sendpwd)
+                svr.sendmail(sendaddr,[toaddr],msg.as_string())
     except Exception as exc:
         print(f"ERROR WHILE SENDING MAIL ({exc})")
         return ret(False,"error",f"Could not send mail: {exc}")
