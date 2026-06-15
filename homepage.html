@@ -21,10 +21,11 @@
         <br>
         <h3>How the JSON object has to look like for '/api/sendmail':</h3>
         <p>
-            <b>{"smtp_server":SERVER-ADDR,"from_email":SENDER,"from_password":SENDER-PWD,"to_email":RECIEVER,"subject":SUBJECT,"content":MESSAGE}</b><br>
+            <b>{"smtp_server":SERVER-ADDR,"smtp_port":SERVER-PORT,"from_email":SENDER,"from_password":SENDER-PWD,"to_email":RECIEVER,"subject":SUBJECT,"content":MESSAGE}</b><br>
             <i>What do the parameters mean?</i>
             <ul>
                 <li><b>SERVER-ADDR </b>defines the SMTP Server domain of your provider</li>
+                <li><b>SERVER-PORT</b>, if given, configures the port of the server used for the SMTP communication. We either support 'ssl' or 'tls', where you can also enter custom port numbers. Please be aware of that if the port is not 465, we will try to initialize a TLS communication on that port.</li>
                 <li><b>SENDER </b>Your E-Mail address</li>
                 <li><b>SENDER-PWD </b>Your password for your provider. We do not store this longer than your request takes.</li>
                 <li><b>RECIEVER </b>is the E-Mail address of the person who should recieve the E-Mail. We do only support sending E-Mails to one person at a time, so this need to be a String.</li>
